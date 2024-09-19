@@ -1,6 +1,7 @@
 package ru.kiomaru.ppproject;
 
 import ru.kiomaru.ppproject.model.User;
+import ru.kiomaru.ppproject.service.UserService;
 import ru.kiomaru.ppproject.service.UserServiceImpl;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        UserServiceImpl userService = new UserServiceImpl();
+        UserService userService = new UserServiceImpl();
         userService.createUsersTable();
         userService.saveUser("Alexey", "Ivanov", (byte) 22);
         userService.saveUser("Dmitry", "Antipov", (byte) 27);
@@ -20,5 +21,6 @@ public class Main {
         }
         userService.cleanUsersTable();
         userService.dropUsersTable();
+
     }
 }
