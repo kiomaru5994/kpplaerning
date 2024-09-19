@@ -1,7 +1,7 @@
-package ru.kiomaru.jdbc.dao;
+package ru.kiomaru.ppproject.dao;
 
-import ru.kiomaru.jdbc.model.User;
-import ru.kiomaru.jdbc.util.Util;
+import ru.kiomaru.ppproject.model.User;
+import ru.kiomaru.ppproject.util.Util;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,12 +11,6 @@ import java.util.logging.Logger;
 public class UserDaoJDBCImpl implements UserDao {
     private final Logger logger = Logger.getLogger(getClass().getName());
     private final Util util = new Util();
-    private final String tableExistSql = "SELECT EXISTS(" +
-            "    SELECT 1" +
-            "    FROM information_schema.tables" +
-            "    WHERE table_schema = 'pp_schema'" +
-            "      AND table_name = 'Users'" +
-            ") AS table_exists;";
 
     public UserDaoJDBCImpl() {
 
@@ -24,6 +18,12 @@ public class UserDaoJDBCImpl implements UserDao {
     private boolean tableExists() {
         try (Connection connection = util.getConnection();
              Statement stmt = connection.createStatement()) {
+            String tableExistSql = "SELECT EXISTS(" +
+                    "    SELECT 1" +
+                    "    FROM information_schema.tables" +
+                    "    WHERE table_schema = 'pp_schema'" +
+                    "      AND table_name = 'Users'" +
+                    ") AS table_exists;";
             ResultSet resultSet = stmt.executeQuery(tableExistSql);
             if (resultSet.next()) {
                 return resultSet.getBoolean("table_exists");

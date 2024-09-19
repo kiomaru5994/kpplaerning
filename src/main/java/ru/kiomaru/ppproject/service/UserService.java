@@ -1,9 +1,8 @@
-package ru.kiomaru.jdbc.dao;
-
-import ru.kiomaru.jdbc.model.User;
+package ru.kiomaru.ppproject.service;
+import ru.kiomaru.ppproject.model.User;
 import java.util.List;
 
-public interface UserDao {
+public interface UserService {
     void createUsersTable();
 
     void dropUsersTable();

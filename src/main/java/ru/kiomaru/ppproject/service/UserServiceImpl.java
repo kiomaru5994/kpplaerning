@@ -1,7 +1,7 @@
-package ru.kiomaru.jdbc.service;
+package ru.kiomaru.ppproject.service;
 
-import ru.kiomaru.jdbc.dao.UserDaoJDBCImpl;
-import ru.kiomaru.jdbc.model.User;
+import ru.kiomaru.ppproject.dao.UserDaoJDBCImpl;
+import ru.kiomaru.ppproject.model.User;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {

@@ -1,9 +1,11 @@
-package ru.kiomaru.jdbc.dao;
+package ru.kiomaru.ppproject.dao;
 
-import ru.kiomaru.jdbc.model.User;
+import ru.kiomaru.ppproject.model.User;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class UserDaoHibernateImpl implements UserDao {
+    private final Logger logger = Logger.getLogger(getClass().getName());
     public UserDaoHibernateImpl() {
 
     }

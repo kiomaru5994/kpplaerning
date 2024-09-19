@@ -1,7 +1,7 @@
-package ru.kiomaru.jdbc;
+package ru.kiomaru.ppproject;
 
-import ru.kiomaru.jdbc.model.User;
-import ru.kiomaru.jdbc.service.UserServiceImpl;
+import ru.kiomaru.ppproject.model.User;
+import ru.kiomaru.ppproject.service.UserServiceImpl;
 
 import java.util.List;
 
@@ -20,5 +20,6 @@ public class Main {
         }
         userService.cleanUsersTable();
         userService.dropUsersTable();
+
     }
 }

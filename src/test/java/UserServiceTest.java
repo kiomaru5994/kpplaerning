@@ -1,8 +1,8 @@
 import org.junit.Assert;
 import org.junit.Test;
-import ru.kiomaru.jdbc.model.User;
-import ru.kiomaru.jdbc.service.UserService;
-import ru.kiomaru.jdbc.service.UserServiceImpl;
+import ru.kiomaru.ppproject.model.User;
+import ru.kiomaru.ppproject.service.UserService;
+import ru.kiomaru.ppproject.service.UserServiceImpl;
 
 import java.util.List;
 

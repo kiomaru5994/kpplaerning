@@ -1,4 +1,4 @@
-package ru.kiomaru.jdbc.util;
+package ru.kiomaru.ppproject.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
