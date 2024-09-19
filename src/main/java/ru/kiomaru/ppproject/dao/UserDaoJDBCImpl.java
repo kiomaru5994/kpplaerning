@@ -16,7 +16,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     }
     private boolean tableExists() {
-        try (Connection connection = util.getConnection();
+        try (Connection connection = util.getConnectionJDBC();
              Statement stmt = connection.createStatement()) {
             String tableExistSql = "SELECT EXISTS(" +
                     "    SELECT 1" +
@@ -35,7 +35,7 @@ public class UserDaoJDBCImpl implements UserDao {
     }
     public void createUsersTable() {
         if (tableExists()) return;
-        try (Connection connection = util.getConnection();
+        try (Connection connection = util.getConnectionJDBC();
              Statement stmt = connection.createStatement()) {
             String createUserTableSQL = "CREATE TABLE `pp_schema`.`Users` (" +
                     "  `id` BIGINT NOT NULL AUTO_INCREMENT," +
@@ -53,7 +53,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         if (!tableExists()) return;
-        try (Connection connection = util.getConnection();
+        try (Connection connection = util.getConnectionJDBC();
              Statement stmt = connection.createStatement()) {
             String dropUserTableSQL = "DROP TABLE `pp_schema`.`Users`;";
             stmt.executeUpdate(dropUserTableSQL);
@@ -66,7 +66,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         String saveUserToSQL = "INSERT INTO pp_schema.Users (name, lastName, age) VALUES (?, ?, ?)";
-        try (Connection connection = util.getConnection();
+        try (Connection connection = util.getConnectionJDBC();
              PreparedStatement preparedStatement = connection.prepareStatement(saveUserToSQL)) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
@@ -81,7 +81,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void removeUserById(long id) {
         String removeUserFromSQL = "DELETE FROM pp_schema.Users WHERE id = ?";
-        try (Connection connection = util.getConnection();
+        try (Connection connection = util.getConnectionJDBC();
              PreparedStatement preparedStatement = connection.prepareStatement(removeUserFromSQL)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
@@ -94,7 +94,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         String selectAllUsersSQL = "SELECT * FROM pp_schema.Users;";
-        try (Connection connection = util.getConnection();
+        try (Connection connection = util.getConnectionJDBC();
              Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(selectAllUsersSQL);
             while (resultSet.next()) {
@@ -115,7 +115,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         @SuppressWarnings("SqlWithoutWhere")
         String cleanUsersTableSQL = "DELETE FROM `pp_schema`.`Users`;";
-        try (Connection conn = util.getConnection();
+        try (Connection conn = util.getConnectionJDBC();
              Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(cleanUsersTableSQL);
             logger.fine("Users table cleaned");
