@@ -1,21 +1,22 @@
 package ru.kiomaru.ppproject.model;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-@Table
+@Entity
+@Table(name = "Users")
 public class User {
     @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(name = "name")
     private String name;
 
-    @Column
+    @Column(name = "lastName")
     private String lastName;
 
-    @Column
+    @Column(name = "age")
     private Byte age;
 
     public User() {
@@ -60,7 +61,7 @@ public class User {
         this.age = age;
     }
 
-    public String toString(){
+    public String toString() {
         return "ID: " + getId() + " " + "| Name: " + getName() + " " + "| LastName: " + getLastName() + " " + "| Age: " + getAge();
     }
 }
