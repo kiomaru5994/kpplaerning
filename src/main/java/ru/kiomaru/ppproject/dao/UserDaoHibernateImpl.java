@@ -1,6 +1,8 @@
 package ru.kiomaru.ppproject.dao;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import ru.kiomaru.ppproject.model.User;
 import ru.kiomaru.ppproject.util.Util;
 
@@ -12,14 +14,13 @@ import java.util.logging.Logger;
 public class UserDaoHibernateImpl implements UserDao {
     private final Logger logger = Logger.getLogger(getClass().getName());
     private final Util util = new Util();
-
+    private final SessionFactory sessionFactory = util.getSessionFactory();
     public UserDaoHibernateImpl() {
 
     }
 
     @Override
     public void createUsersTable() {
-        Session session = util.getSession();
         String createUserTableSQL = "CREATE TABLE IF NOT EXISTS `pp_schema`.`Users` (" +
                 "  `id` BIGINT NOT NULL AUTO_INCREMENT," +
                 "  `name` VARCHAR(15) NOT NULL," +
@@ -27,87 +28,81 @@ public class UserDaoHibernateImpl implements UserDao {
                 "  `age` TINYINT NOT NULL," +
                 "  PRIMARY KEY (`id`)," +
                 "  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);";
-        try {
-            session.beginTransaction();
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()){
+            transaction = session.beginTransaction();
             session.createNativeQuery(createUserTableSQL).executeUpdate();
-            session.getTransaction().commit();
+            transaction.commit();
         } catch (Exception e) {
-            if (session.getTransaction() != null) session.getTransaction().rollback();
+            if (transaction != null) transaction.rollback();
             logger.warning("Error creating user table: " + e.getMessage());
-        } finally {
-            session.close();
         }
     }
 
     @Override
     public void dropUsersTable() {
-        Session session = util.getSession();
         String dropUserTableSQL = "DROP TABLE IF EXISTS `pp_schema`.`Users`;";
-        try {
-            session.beginTransaction();
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()){
+            transaction = session.beginTransaction();
             session.createNativeQuery(dropUserTableSQL).executeUpdate();
-            session.getTransaction().commit();
+            transaction.commit();
         } catch (Exception e) {
-            if (session.getTransaction() != null) session.getTransaction().rollback();
+            if (transaction != null) transaction.rollback();
             logger.warning("Error dropping user table: " + e.getMessage());
-        } finally {
-            session.close();
         }
     }
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
-        Session session = util.getSession();
-        try {
-            session.beginTransaction();
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()){
+            transaction = session.beginTransaction();
             User user = new User(name, lastName, age);
-            session.save(user);
-            session.getTransaction().commit();
+            session.persist(user);
+            transaction.commit();
         } catch (Exception e) {
-            if (session.getTransaction() != null) session.getTransaction().rollback();
+            if (transaction!= null) transaction.rollback();
             logger.warning("Error saving user: " + e.getMessage());
-        } finally {
-            session.close();
         }
     }
 
     @Override
     public void removeUserById(long id) {
-        Session session = util.getSession();
-        try {
-            session.beginTransaction();
-            session.delete(session.get(User.class, id));
-            session.getTransaction().commit();
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()){
+            transaction = session.beginTransaction();
+            session.remove(session.get(User.class, id));
+            transaction.commit();
         } catch (Exception e) {
-            if (session.getTransaction() != null) session.getTransaction().rollback();
+            if (transaction != null) transaction.rollback();
             logger.warning("Error removing user: " + e.getMessage());
-        } finally {
-            session.close();
         }
     }
 
     @Override
     public List<User> getAllUsers() {
-        Session session = util.getSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<User> query = builder.createQuery(User.class);
-        query.from(User.class);
-        List<User> users = session.createQuery(query).getResultList();
-        session.close();
+        List<User> users = null;
+        try (Session session = sessionFactory.openSession()){
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+            CriteriaQuery<User> query = builder.createQuery(User.class);
+            query.from(User.class);
+            users = session.createQuery(query).getResultList();
+        } catch (Exception e) {
+            logger.warning("Error fetching users: " + e.getMessage());
+        }
         return users;
     }
 
     @Override
     public void cleanUsersTable() {
-        Session session = util.getSession();
-        try {
-            session.beginTransaction();
+        Transaction transaction = null;
+        try (Session session = sessionFactory.openSession()){
+            transaction = session.beginTransaction();
             session.createQuery("DELETE FROM User").executeUpdate();
-            session.getTransaction().commit();
+            transaction.commit();
         } catch (Exception e) {
-            if (session.getTransaction() != null) session.getTransaction().rollback();
-        } finally {
-            session.close();
+            if (transaction != null) transaction.rollback();
         }
     }
 }

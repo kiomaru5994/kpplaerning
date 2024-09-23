@@ -29,7 +29,7 @@ public class Util {
         props.setProperty("hibernate.connection.url", dbUrl);
         props.setProperty("hibernate.connection.username", dbUser);
         props.setProperty("hibernate.connection.password", dbPass);
-        props.setProperty("dialect", "org.hibernate.dialect.MySQLDialect");
+        props.setProperty("dialect", "org.hibernate.dialect.MariaDBDialect");
         SessionFactory tempSessionFactory = null;
         try {
             tempSessionFactory = new Configuration().addAnnotatedClass(User.class).addProperties(props).buildSessionFactory();
@@ -44,12 +44,12 @@ public class Util {
 
     }
 
-    public Session getSession() {
+    public SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             logger.warning("Error: sessionFactory is null");
             return null;
         }
-        return sessionFactory.openSession();
+        return sessionFactory;
     }
 
     public void shutdownFactory() {
